@@ -1,20 +1,21 @@
 services:
   pgwatch:
-    # uncomment build section below for dev experience
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
     image: cybertecpostgresql/pgwatch:latest
     container_name: pgwatch
     environment:
-      PW_SOURCES: postgresql://pgwatch@postgres:5432/pgwatch
-    command:
-      - "--sink=postgresql://pgwatch@postgres:5432/pgwatch_metrics"
-      - "--sink=prometheus://pgwatch:9187/pgwatch"
+      PW_SINK: postgresql://pgwatch:${POSTGRES_USER_PGWATCH_PASSWORD}@postgres:5432/pgwatch_metrics
+      PW_SOURCES: postgresql://pgwatch:${POSTGRES_USER_PGWATCH_PASSWORD}@postgres:5432/pgwatch
+      PW_WEBPASSWORD: ${PGWATCH_WEBUI_ADMIN_PASSWORD}
+      PW_WEBUSER: admin
     ports:
       - "8080:8080"
-      - "9187:9187"
-      # - "6060:6060" # Uncomment for profiling
+      # - "6060:6060"  # Uncomment for profiling
     depends_on:
       postgres:
         condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
