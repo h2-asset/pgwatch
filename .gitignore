@@ -31,3 +31,6 @@ debug
 # Files generated through templating
 docker/bootstrap/create_role_db.sql
 grafana/postgres_datasource.yml
+
+# Dotenv
+.env
