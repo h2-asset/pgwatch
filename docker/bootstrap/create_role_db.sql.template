@@ -1,0 +1,8 @@
+CREATE ROLE pgwatch WITH
+    LOGIN PASSWORD "${POSTGRES_USER_PGWATCH_PASSWORD}";
+
+-- Cria um DB no postgres do Docker para salvar metadados do pgwatch
+CREATE DATABASE pgwatch OWNER pgwatch;
+
+-- Cria um DB no postgres do Docker para salvar as métricas extraídas do DB source
+CREATE DATABASE pgwatch_metrics OWNER pgwatch;
