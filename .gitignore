@@ -24,3 +24,10 @@ debug
 
 # IntelliJ Idea settings
 .idea/
+
+# macOS Finder files
+.DS_Store
+
+# Files generated through templating
+docker/bootstrap/create_role_db.sql
+grafana/postgres_datasource.yml
