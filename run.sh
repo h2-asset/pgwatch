@@ -1,5 +1,11 @@
 #!/bin/bash
-export $(grep -v '^#' .env | xargs)
+
+# Silenciosamente exporta as variáveis do .env
+while IFS='=' read -r key value || [ -n "$key" ]; do
+  # Ignora linhas comentadas e vazias
+  [[ $key =~ ^#.*$ || -z $key ]] && continue
+  export "$key=$value"
+done < <(cat .env)
 
 set -e
 
