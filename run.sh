@@ -10,21 +10,28 @@ done < <(cat .env)
 set -e
 
 REQUIRED_VARS=(
-    "GRAFANA_ADMIN_PASSWORD"
-    "GRAFANA_AUTH_GITHUB_CLIENT_ID"
-    "GRAFANA_AUTH_GITHUB_CLIENT_SECRET"
-    "GRAFANA_SERVER_ROOT_URL"
-    "PGWATCH_WEBUI_ADMIN_PASSWORD"
-    "POSTGRES_USER_PGWATCH_PASSWORD"
-    "POSTGRES_USER_POSTGRES_PASSWORD"
-    )
+  "GRAFANA_ADMIN_PASSWORD"
+  "GRAFANA_AUTH_GITHUB_CLIENT_ID"
+  "GRAFANA_AUTH_GITHUB_CLIENT_SECRET"
+  "GRAFANA_SERVER_ROOT_URL"
+  "PGWATCH_WEBUI_ADMIN_PASSWORD"
+  "POSTGRES_USER_PGWATCH_PASSWORD"
+  "POSTGRES_USER_POSTGRES_PASSWORD"
+)
+
+missing_vars=()
 
 for var in "${REQUIRED_VARS[@]}"; do
   if [ -z "${!var}" ]; then
-    echo "❌ ERRO: Variável de ambiente $var não está definida."
-    exit 1
+    echo "❌ Erro: Variável de ambiente obrigatória não definida: $var"
+    missing_vars+=("$var")
   fi
 done
+
+if [ "${#missing_vars[@]}" -ne 0 ]; then
+  echo -e "\nDefina todas as variáveis obrigatórias acima no arquivo .env."
+  exit 1
+fi
 
 echo "🔧 Gerando arquivos a partir dos templates..."
 
